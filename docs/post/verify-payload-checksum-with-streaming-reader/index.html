@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Verify Payload Checksum with Streaming Reader - Exploring the mechanical and digital world</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Jason Del Ponte" /><meta name="description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value." /><meta name="keywords" content="Go, golang, software, programming, tinker, engineer" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.76.5 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+
+
+
+<meta property="og:title" content="Verify Payload Checksum with Streaming Reader" />
+<meta property="og:description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/" />
+<meta property="article:published_time" content="2020-10-17T12:00:00-07:00" />
+<meta property="article:modified_time" content="2020-10-17T14:55:42-07:00" />
+<meta itemprop="name" content="Verify Payload Checksum with Streaming Reader">
+<meta itemprop="description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value.">
+<meta itemprop="datePublished" content="2020-10-17T12:00:00-07:00" />
+<meta itemprop="dateModified" content="2020-10-17T14:55:42-07:00" />
+<meta itemprop="wordCount" content="714">
+
+
+
+<meta itemprop="keywords" content="golang," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Verify Payload Checksum with Streaming Reader"/>
+<meta name="twitter:description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Exploring the mechanical and digital world</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Exploring the mechanical and digital world</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Verify Payload Checksum with Streaming Reader</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-10-17 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">Contents</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#preprocess-payload-validation">Preprocess payload validation</a></li>
+            <li><a href="#stream-payload-validation">Stream payload validation</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>Sometimes you may find your self working with an API gives you the
+opportunity to validate the integrity of the payload provided through
+a checksum. There are a few different ways that you could go about
+validating the integrity of the payload.</p>
+<h3 id="preprocess-payload-validation">Preprocess payload validation</h3>
+<p>One way to do this would be to load the full payload all into memory. Then
+before consuming the payload your application would compute the checksum
+of the payload and compare it against the expect value.</p>
+<p>The library and exact method of computing the checksum may differ based on
+your use case, but the resulting logic most likely will be similar to the
+example code here. For these examples we&rsquo;ll use Go&rsquo;s <a href="https://golang.org/pkg/hash/crc32/">hash/crc32</a> package
+with the common polynomial
+<a href="https://golang.org/pkg/hash/crc32/#IEEE">IEEE</a>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;hash/crc32&#34;
+</span><span class="c1"></span>
+<span class="c1">// ValidateIntegrity computes the CRC32 checksum of the byte slice provided,
+</span><span class="c1">// and compares it against the expectec checksum.
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">ValidateIntegrity</span><span class="p">(</span><span class="nx">expect</span> <span class="kt">uint32</span><span class="p">,</span> <span class="nx">body</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+	<span class="nx">actual</span> <span class="o">:=</span> <span class="nx">crc32</span><span class="p">.</span><span class="nf">ChecksumIEEE</span><span class="p">(</span><span class="nx">body</span><span class="p">)</span>
+	<span class="k">if</span> <span class="nx">expect</span> <span class="o">!=</span> <span class="nx">actual</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;expect %08X checksum, got %08X&#34;</span><span class="p">,</span> <span class="nx">expect</span><span class="p">,</span> <span class="nx">actual</span><span class="p">)</span>
+	<span class="p">}</span>
+
+    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>This approach has the benefit of validating the integrity of the payload
+before it is consumed. But comes with the downside that if the payload is
+too large to this approach could put significant pressure on the
+application&rsquo;s memory.</p>
+<h3 id="stream-payload-validation">Stream payload validation</h3>
+<p>Instead of requiring the payload to be read into memory before it can be
+validated, our application could compute the checksum as the payload is
+consumed upstream. This approach will allow our application to operate on
+the payload as an stream, (i.e. <a href="https://golang.org/pkg/io/#Reader">io.Reader</a>) while at the same time
+compute and validate the checksum. Very little additional memory is needed
+to compute the payload&rsquo;s checksum this way.</p>
+<p>This is a good approach when the upstream processing in transactional and
+will not operate on the payload until its been fully processed. If this is
+not the case, streaming checksum validation can lead to unexpected errors,
+because the integrity of the payload can not be validated until the entire
+payload has been consumed.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;hash/crc32&#34;
+</span><span class="c1">// import &#34;encoding/csv&#34;
+</span><span class="c1"></span>
+<span class="nx">wrapped</span> <span class="o">:=</span> <span class="nf">NewValidateCRC32Reader</span><span class="p">(</span><span class="nx">expectCRC32</span><span class="p">,</span> <span class="nx">payload</span><span class="p">)</span>
+
+<span class="nx">rows</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">csv</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">wrapped</span><span class="p">).</span><span class="nf">ReadAll</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>In the above example a <code>StreamValidateCRC32</code> function is called that takes
+the expected CRC32 checksum, the payload, and returns the payload wrapped
+with CRC32 checksum validation. This function wraps the payload with
+a type that implements the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> interface. This type will
+iteratively compute the checksum of the payload as the downstream consumer
+reads from it. When the payload has been fully consumed, the wrapper will
+compare the computed checksum with the expected value. If the values are
+not equal are not equal an relevant error can be returned. Otherwise the
+wrapper will return <code>io.EOF</code> when the payload is valid and has been fully
+read.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;io&#34;
+</span><span class="c1">// import &#34;hash/crc32&#34;
+</span><span class="c1"></span>
+<span class="c1">// ValidateCRC32Reader provides a wrapper for an io.Reader that computes a
+</span><span class="c1">// running checksum as the wrapped reader is read. When the underlying reader
+</span><span class="c1">// returns EOF, the validator will compare the checksums.
+</span><span class="c1"></span><span class="kd">type</span> <span class="nx">ValidateCRC32Reader</span> <span class="kd">struct</span> <span class="p">{</span>
+	<span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span>
+	<span class="nx">expect</span> <span class="kt">uint32</span>
+	<span class="nx">actual</span> <span class="kt">uint32</span>
+<span class="p">}</span>
+
+<span class="c1">// NewValidateCRC32Reader initializes a new ValidateCRC32Reader wrapping the
+</span><span class="c1">// reader provided.
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">NewValidateCRC32Reader</span><span class="p">(</span><span class="nx">expect</span> <span class="kt">uint32</span><span class="p">,</span> <span class="nx">reader</span> <span class="nx">io</span><span class="p">.</span><span class="nx">Reader</span><span class="p">)</span> <span class="o">*</span><span class="nx">ValidateCRC32Reader</span> <span class="p">{</span>
+	<span class="k">return</span> <span class="o">&amp;</span><span class="nx">ValidateCRC32Reader</span><span class="p">{</span>
+		<span class="nx">expect</span><span class="p">:</span> <span class="nx">expect</span><span class="p">,</span>
+		<span class="nx">Reader</span><span class="p">:</span> <span class="nx">reader</span><span class="p">,</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Read reads from the wrapped reader, and updates the checksum. When the
+</span><span class="c1">// wrapped reader returns EOF, the expected checksum will be compared against
+</span><span class="c1">// the computed value. If they differ and error will be returned.
+</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">v</span> <span class="o">*</span><span class="nx">ValidateCRC32Reader</span><span class="p">)</span> <span class="nf">Read</span><span class="p">(</span><span class="nx">p</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nx">n</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">v</span><span class="p">.</span><span class="nx">Reader</span><span class="p">.</span><span class="nf">Read</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+
+	<span class="nx">v</span><span class="p">.</span><span class="nx">actual</span> <span class="p">=</span> <span class="nx">crc32</span><span class="p">.</span><span class="nf">Update</span><span class="p">(</span><span class="nx">v</span><span class="p">.</span><span class="nx">actual</span><span class="p">,</span> <span class="nx">crc32</span><span class="p">.</span><span class="nx">IEEETable</span><span class="p">,</span> <span class="nx">p</span><span class="p">[:</span><span class="nx">n</span><span class="p">])</span>
+	<span class="k">if</span> <span class="nx">err</span> <span class="o">==</span> <span class="nx">io</span><span class="p">.</span><span class="nx">EOF</span> <span class="o">&amp;&amp;</span> <span class="nx">v</span><span class="p">.</span><span class="nx">actual</span> <span class="o">!=</span> <span class="nx">v</span><span class="p">.</span><span class="nx">expect</span> <span class="p">{</span>
+		<span class="k">return</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;invalid checksum %08X does not match %08X&#34;</span><span class="p">,</span>
+			<span class="nx">v</span><span class="p">.</span><span class="nx">actual</span><span class="p">,</span> <span class="nx">v</span><span class="p">.</span><span class="nx">expect</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>The above <code>ValidateCRC32Reader</code> wraps the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> it is initialized
+with, and computes the checksum of the wrapped reader as its content is
+read. When the wrapped reader returns <a href="https://golang.org/pkg/io/#EOF">io.EOF</a> the <code>ValidateCRC32Reader</code>
+will return an error if the actual checksum of the content doesn&rsquo;t match
+the expected value.</p>
+<p>Checkout the full example <a href="https://github.com/jasdel/jasdel.github.io/blob/b6d84b368a93fb19b608d7408c8bb2815c58f0d3/code/golang/verifyChecksum/verify.go#L21-L52">On Github</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">Author</span>
+    <span class="item-content">Jason Del Ponte</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">LastMod</span>
+    <span class="item-content">
+        2020-10-17
+        <a href="github.com/jasdel/jasdel.github.io/commit/20a611765d8cc3162970956a2b18934adb5b852c" title="publish streaming reader checksum">(20a6117)</a>
+    </span>
+  </p>
+  
+  <p class="copyright-item">
+    <span class="item-title">License</span>
+    <span class="item-content"><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span>
+  </p>
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/golang/">golang</a>
+          </div>
+      <nav class="post-nav">
+        
+        
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:contact@jasdel.dev" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/280548/jason-d" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/jasondelponte" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://github.com/jasdel" class="iconfont icon-github" title="github"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    Theme - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">Jason Del Ponte</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  <script type="text/javascript" src="/lib/jquery/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout-1.0.1.min.js"></script>
+  
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
