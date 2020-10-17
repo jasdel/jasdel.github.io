@@ -13,8 +13,8 @@
       <pubDate>Sat, 17 Oct 2020 12:00:00 -0700</pubDate>
       
       <guid>http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/</guid>
-      <description>Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
-Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value.</description>
+      <description>Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here.</description>
     </item>
     
   </channel>

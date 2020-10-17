@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="Jason Del Ponte" /><meta name="description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
-Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value." /><meta name="keywords" content="Go, golang, software, programming, tinker, engineer" />
+<meta name="author" content="Jason Del Ponte" /><meta name="description" content="Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here." /><meta name="keywords" content="Go, golang, software, programming, tinker, engineer" />
 
 
 
@@ -41,26 +41,26 @@ Preprocess payload validation One way to do this would be to load the full paylo
 
 
 <meta property="og:title" content="Verify Payload Checksum with Streaming Reader" />
-<meta property="og:description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
-Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value." />
+<meta property="og:description" content="Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/" />
 <meta property="article:published_time" content="2020-10-17T12:00:00-07:00" />
-<meta property="article:modified_time" content="2020-10-17T14:55:42-07:00" />
+<meta property="article:modified_time" content="2020-10-17T15:55:32-07:00" />
 <meta itemprop="name" content="Verify Payload Checksum with Streaming Reader">
-<meta itemprop="description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
-Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value.">
+<meta itemprop="description" content="Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here.">
 <meta itemprop="datePublished" content="2020-10-17T12:00:00-07:00" />
-<meta itemprop="dateModified" content="2020-10-17T14:55:42-07:00" />
-<meta itemprop="wordCount" content="714">
+<meta itemprop="dateModified" content="2020-10-17T15:55:32-07:00" />
+<meta itemprop="wordCount" content="731">
 
 
 
 <meta itemprop="keywords" content="golang," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Verify Payload Checksum with Streaming Reader"/>
-<meta name="twitter:description" content="Sometimes you may find your self working with an API gives you the opportunity to validate the integrity of the payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
-Preprocess payload validation One way to do this would be to load the full payload all into memory. Then before consuming the payload your application would compute the checksum of the payload and compare it against the expect value."/>
+<meta name="twitter:description" content="Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
+The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here."/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -152,19 +152,22 @@ Preprocess payload validation One way to do this would be to load the full paylo
   </div>
 </div>
     <div class="post-content">
-      <p>Sometimes you may find your self working with an API gives you the
-opportunity to validate the integrity of the payload provided through
+      <p>Sometimes you may find yourself working with an API that gives you the
+opportunity to validate the integrity of a payload provided through
 a checksum. There are a few different ways that you could go about
 validating the integrity of the payload.</p>
-<h3 id="preprocess-payload-validation">Preprocess payload validation</h3>
-<p>One way to do this would be to load the full payload all into memory. Then
-before consuming the payload your application would compute the checksum
-of the payload and compare it against the expect value.</p>
 <p>The library and exact method of computing the checksum may differ based on
 your use case, but the resulting logic most likely will be similar to the
-example code here. For these examples we&rsquo;ll use Go&rsquo;s <a href="https://golang.org/pkg/hash/crc32/">hash/crc32</a> package
+examples here. For these examples we&rsquo;ll use Go&rsquo;s <a href="https://golang.org/pkg/hash/crc32/">hash/crc32</a> package
 with the common polynomial
 <a href="https://golang.org/pkg/hash/crc32/#IEEE">IEEE</a>.</p>
+<h3 id="preprocess-payload-validation">Preprocess payload validation</h3>
+<p>One way to do this would be to read the full payload into memory. Then
+before consuming the payload, your application would compute the checksum
+of the payload and compare it against the expected value. Once the payload
+is validated your application would be free to process the payload.</p>
+<p>The following example validates the payload checksum after it has been
+read into memory.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -177,40 +180,38 @@ with the common polynomial
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;hash/crc32&#34;
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;fmt&#34;
+</span><span class="c1">// import &#34;hash/crc32&#34;
+</span><span class="c1">// import &#34;io/ioutil&#34;
 </span><span class="c1"></span>
-<span class="c1">// ValidateIntegrity computes the CRC32 checksum of the byte slice provided,
-</span><span class="c1">// and compares it against the expectec checksum.
-</span><span class="c1"></span><span class="kd">func</span> <span class="nf">ValidateIntegrity</span><span class="p">(</span><span class="nx">expect</span> <span class="kt">uint32</span><span class="p">,</span> <span class="nx">body</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-	<span class="nx">actual</span> <span class="o">:=</span> <span class="nx">crc32</span><span class="p">.</span><span class="nf">ChecksumIEEE</span><span class="p">(</span><span class="nx">body</span><span class="p">)</span>
-	<span class="k">if</span> <span class="nx">expect</span> <span class="o">!=</span> <span class="nx">actual</span> <span class="p">{</span>
-		<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;expect %08X checksum, got %08X&#34;</span><span class="p">,</span> <span class="nx">expect</span><span class="p">,</span> <span class="nx">actual</span><span class="p">)</span>
-	<span class="p">}</span>
+<span class="nx">payload</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadAll</span><span class="p">(</span><span class="nx">reader</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="kc">nil</span>
+<span class="nx">actual</span> <span class="o">:=</span> <span class="nx">crc32</span><span class="p">.</span><span class="nf">ChecksumIEEE</span><span class="p">(</span><span class="nx">payload</span><span class="p">)</span>
+<span class="k">if</span> <span class="nx">expect</span> <span class="o">!=</span> <span class="nx">actual</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;expect %08X checksum, got %08X&#34;</span><span class="p">,</span> <span class="nx">expect</span><span class="p">,</span> <span class="nx">actual</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div><p>This approach has the benefit of validating the integrity of the payload
 before it is consumed. But comes with the downside that if the payload is
-too large to this approach could put significant pressure on the
+too large, this approach could put significant pressure on the
 application&rsquo;s memory.</p>
 <h3 id="stream-payload-validation">Stream payload validation</h3>
 <p>Instead of requiring the payload to be read into memory before it can be
 validated, our application could compute the checksum as the payload is
-consumed upstream. This approach will allow our application to operate on
-the payload as an stream, (i.e. <a href="https://golang.org/pkg/io/#Reader">io.Reader</a>) while at the same time
-compute and validate the checksum. Very little additional memory is needed
-to compute the payload&rsquo;s checksum this way.</p>
+read downstream. This approach will allow our application to operate on
+the payload as an stream, (i.e. <a href="https://golang.org/pkg/io/#Reader">io.Reader</a>) while also compute and
+validate the checksum. Very little additional memory is needed to compute
+the checksum this way.</p>
 <p>This is a good approach when the upstream processing in transactional and
-will not operate on the payload until its been fully processed. If this is
-not the case, streaming checksum validation can lead to unexpected errors,
-because the integrity of the payload can not be validated until the entire
-payload has been consumed.</p>
+will not operate on the payload until its been fully read. If this is not
+the case, streaming checksum validation can lead to unexpected errors,
+because the integrity of the payload cannot be validated until after the
+entire payload has been read.</p>
+<p>The following is an example of wrapping the payload with a type that will
+compute the checksum and proxy the <code>Read</code> method calls.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -229,16 +230,15 @@ payload has been consumed.</p>
 <span class="nx">rows</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">csv</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">wrapped</span><span class="p">).</span><span class="nf">ReadAll</span><span class="p">()</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>In the above example a <code>StreamValidateCRC32</code> function is called that takes
-the expected CRC32 checksum, the payload, and returns the payload wrapped
-with CRC32 checksum validation. This function wraps the payload with
-a type that implements the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> interface. This type will
-iteratively compute the checksum of the payload as the downstream consumer
-reads from it. When the payload has been fully consumed, the wrapper will
-compare the computed checksum with the expected value. If the values are
-not equal are not equal an relevant error can be returned. Otherwise the
-wrapper will return <code>io.EOF</code> when the payload is valid and has been fully
-read.</p>
+</div><p>In the above example a <code>StreamValidateCRC32</code> function takes the expected
+CRC32 checksum, the payload, and returns the payload wrapped with CRC32
+checksum validation. This function wraps the payload with a type that
+implements the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> interface. This type will iteratively compute
+the checksum of the payload as the downstream consumer reads from it. When
+the payload has been fully read, the wrapper will compare the computed
+checksum with the expected value. If the values are not equal a relevant
+error can be returned. Otherwise the wrapper will return <code>io.EOF</code> when the
+payload is valid and has been fully read.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -315,7 +315,7 @@ read.</p>
 <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>The above <code>ValidateCRC32Reader</code> wraps the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> it is initialized
+</div><p>The <code>ValidateCRC32Reader</code> type wraps the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> it is initialized
 with, and computes the checksum of the wrapped reader as its content is
 read. When the wrapped reader returns <a href="https://golang.org/pkg/io/#EOF">io.EOF</a> the <code>ValidateCRC32Reader</code>
 will return an error if the actual checksum of the content doesn&rsquo;t match
@@ -333,7 +333,7 @@ the expected value.</p>
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2020-10-17
-        <a href="github.com/jasdel/jasdel.github.io/commit/20a611765d8cc3162970956a2b18934adb5b852c" title="publish streaming reader checksum">(20a6117)</a>
+        <a href="github.com/jasdel/jasdel.github.io/commit/0b6269bad6fbab1ff1cd17b9b8312ceb722aaf29" title="edit fixups">(0b6269b)</a>
     </span>
   </p>
   

@@ -3,35 +3,35 @@
   
   <url>
     <loc>http://localhost:1313/</loc>
-    <lastmod>2020-10-17T14:55:42-07:00</lastmod>
+    <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://localhost:1313/tags/golang/</loc>
-    <lastmod>2020-10-17T14:55:42-07:00</lastmod>
+    <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://localhost:1313/post/</loc>
-    <lastmod>2020-10-17T14:55:42-07:00</lastmod>
+    <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://localhost:1313/tags/</loc>
-    <lastmod>2020-10-17T14:55:42-07:00</lastmod>
+    <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/</loc>
-    <lastmod>2020-10-17T14:55:42-07:00</lastmod>
+    <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
