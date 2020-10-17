@@ -1,7 +1,7 @@
 ---
 title: "Verify Payload Checksum with Streaming Reader"
-date: 2020-08-15T23:17:34-07:00
-draft: true
+date: 2020-10-17T12:00:00-07:00
+draft: false
 tags: [golang]
 ---
 
