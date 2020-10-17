@@ -1,43 +1,43 @@
-<?xml-stylesheet type="text/xsl" href="http://localhost:1313/sitemap.xsl"?>
+<?xml-stylesheet type="text/xsl" href="https://tinker.jasdel.dev/sitemap.xsl"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://tinker.jasdel.dev/</loc>
     <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/golang/</loc>
+    <loc>https://tinker.jasdel.dev/tags/golang/</loc>
     <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/post/</loc>
+    <loc>https://tinker.jasdel.dev/post/</loc>
     <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://tinker.jasdel.dev/tags/</loc>
     <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/</loc>
+    <loc>https://tinker.jasdel.dev/post/verify-payload-checksum-with-streaming-reader/</loc>
     <lastmod>2020-10-17T15:55:32-07:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://tinker.jasdel.dev/categories/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

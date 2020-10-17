@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on Exploring the digital world</title>
-    <link>http://localhost:1313/post/</link>
+    <link>https://tinker.jasdel.dev/post/</link>
     <description>Recent content in Posts on Exploring the digital world</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 17 Oct 2020 12:00:00 -0700</lastBuildDate><atom:link href="http://localhost:1313/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 Oct 2020 12:00:00 -0700</lastBuildDate><atom:link href="https://tinker.jasdel.dev/post/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Verify Payload Checksum with Streaming Reader</title>
-      <link>http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/</link>
+      <link>https://tinker.jasdel.dev/post/verify-payload-checksum-with-streaming-reader/</link>
       <pubDate>Sat, 17 Oct 2020 12:00:00 -0700</pubDate>
       
-      <guid>http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/</guid>
+      <guid>https://tinker.jasdel.dev/post/verify-payload-checksum-with-streaming-reader/</guid>
       <description>Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
 The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here.</description>
     </item>
