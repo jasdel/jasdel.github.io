@@ -121,7 +121,7 @@ read. When the wrapped reader returns [io.EOF] the `ValidateCRC32Reader`
 will return an error if the actual checksum of the content doesn't match
 the expected value.
 
-Checkout the full example [On Github](https://github.com/jasdel/jasdel.github.io/blob/b6d84b368a93fb19b608d7408c8bb2815c58f0d3/code/golang/verifyChecksum/verify.go#L21-L52)
+Checkout the full example [On Github](https://github.com/jasdel/jasdel.github.io/blob/7a2092277c64f2bcbfbcdd1ac71216b90a87450b/code/golang/verifyChecksum/verify.go#L21-L52)
 
 
 [io.EOF]: https://golang.org/pkg/io/#EOF
