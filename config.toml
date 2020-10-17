@@ -3,7 +3,7 @@ languageCode = "en"
 # en / zh-cn / ... (This field determines which i18n file to use)
 defaultContentLanguage = "en"
 
-title = "Exploring the mechanical and digital world"
+title = "Exploring the digital world"
 preserveTaxonomyNames = true
 enableRobotsTXT = true
 enableEmoji = true
