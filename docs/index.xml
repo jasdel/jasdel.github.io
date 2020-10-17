@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Exploring the mechanical and digital world</title>
+    <title>Exploring the digital world</title>
     <link>http://localhost:1313/</link>
-    <description>Recent content on Exploring the mechanical and digital world</description>
+    <description>Recent content on Exploring the digital world</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sat, 17 Oct 2020 12:00:00 -0700</lastBuildDate><atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
