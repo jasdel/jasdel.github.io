@@ -41,7 +41,7 @@
 
   a {
     color: $theme-color;
-    word-break: break-all;
+    word-break: normal;
 
     &:hover {
       border-bottom: $content-link-border;
