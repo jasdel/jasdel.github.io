@@ -7,6 +7,7 @@ title = "Exploring the digital world"
 preserveTaxonomyNames = true
 enableRobotsTXT = true
 enableEmoji = true
+#theme = "beautifulhugo"
 theme = "even"
 
 # use git commit log to generate lastmod record ↓
@@ -61,7 +62,13 @@ copyright = ""            # default: author.name ↓
   since = "2020"            # Site creation time
 
   # use public git repo url to link lastmod git commit, enableGitInfo should be true.
-  gitRepo = "github.com/jasdel/jasdel.github.io"
+  gitRepo = "https://github.com/jasdel/jasdel.github.io"
+
+  # site info (optional) - beautifulhugo
+  # https://github.com/halogenica/beautifulhugo
+  #pygmentsCodeFences = true
+  #pygmentsUseClasses = true
+  #useHLJS = true
 
   # site info (optional)
   logoTitle = ""        # default: the title value
