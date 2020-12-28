@@ -15,8 +15,8 @@ enableGitInfo = true
 
 # Syntax highlighting by Chroma. NOTE: Don't enable `highlightInClient` and
 # `chroma` at the same time!
-pygmentsOptions = "linenos=table"
-pygmentsCodefences = true
+#pygmentsOptions = "linenos=table"
+pygmentsCodeFences = true
 pygmentsUseClasses = true
 pygmentsCodefencesGuessSyntax = true
 
@@ -63,12 +63,6 @@ copyright = ""            # default: author.name ↓
 
   # use public git repo url to link lastmod git commit, enableGitInfo should be true.
   gitRepo = "https://github.com/jasdel/jasdel.github.io"
-
-  # site info (optional) - beautifulhugo
-  # https://github.com/halogenica/beautifulhugo
-  #pygmentsCodeFences = true
-  #pygmentsUseClasses = true
-  #useHLJS = true
 
   # site info (optional)
   logoTitle = ""        # default: the title value
@@ -119,7 +113,7 @@ copyright = ""            # default: author.name ↓
 
   # Link custom CSS and JS assets
   #   (relative to /static/css and /static/js respectively)
-  customCSS = []
+  customCSS = ['custom.css']
   customJS = []
 
   uglyURLs = false          # please keep same with uglyurls setting

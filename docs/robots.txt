@@ -1,2 +1,2 @@
 User-agent: *
-Sitemap: https://tinker.jasdel.dev/sitemap.xml
+Sitemap: http://localhost:1313/sitemap.xml

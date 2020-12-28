@@ -24,10 +24,10 @@ The library and exact method of computing the checksum may differ based on your 
 
 
 
-<meta name="generator" content="Hugo 0.76.5 with theme even" />
+<meta name="generator" content="Hugo 0.79.1 with theme even" />
 
 
-<link rel="canonical" href="https://tinker.jasdel.dev/post/verify-payload-checksum-with-streaming-reader/" />
+<link rel="canonical" href="http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -36,15 +36,16 @@ The library and exact method of computing the checksum may differ based on your 
 
 
 
-<link href="/sass/main.min.c4c84b63c7cd3db06a2ab918eebdbb965467ac4b2e9910bdfa1532507c2ea091.css" rel="stylesheet">
+<link href="/sass/main.min.f451c7492ba4deb1312c605d592f0812974dd1bb1b8d803853bf90d4d85e19df.css" rel="stylesheet">
 
+<link rel="stylesheet" href="/css/custom.css">
 
 
 <meta property="og:title" content="Verify Payload Checksum with Streaming Reader" />
 <meta property="og:description" content="Sometimes you may find yourself working with an API that gives you the opportunity to validate the integrity of a payload provided through a checksum. There are a few different ways that you could go about validating the integrity of the payload.
 The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://tinker.jasdel.dev/post/verify-payload-checksum-with-streaming-reader/" />
+<meta property="og:url" content="http://localhost:1313/post/verify-payload-checksum-with-streaming-reader/" />
 <meta property="article:published_time" content="2020-10-17T12:00:00-07:00" />
 <meta property="article:modified_time" content="2020-10-17T15:55:32-07:00" />
 <meta itemprop="name" content="Verify Payload Checksum with Streaming Reader">
@@ -52,7 +53,7 @@ The library and exact method of computing the checksum may differ based on your 
 The library and exact method of computing the checksum may differ based on your use case, but the resulting logic most likely will be similar to the examples here.">
 <meta itemprop="datePublished" content="2020-10-17T12:00:00-07:00" />
 <meta itemprop="dateModified" content="2020-10-17T15:55:32-07:00" />
-<meta itemprop="wordCount" content="731">
+<meta itemprop="wordCount" content="680">
 
 
 
@@ -168,21 +169,7 @@ of the payload and compare it against the expected value. Once the payload
 is validated your application would be free to process the payload.</p>
 <p>The following example validates the payload checksum after it has been
 read into memory.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;fmt&#34;
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;fmt&#34;
 </span><span class="c1">// import &#34;hash/crc32&#34;
 </span><span class="c1">// import &#34;io/ioutil&#34;
 </span><span class="c1"></span>
@@ -192,9 +179,7 @@ read into memory.</p>
 <span class="k">if</span> <span class="nx">expect</span> <span class="o">!=</span> <span class="nx">actual</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;expect %08X checksum, got %08X&#34;</span><span class="p">,</span> <span class="nx">expect</span><span class="p">,</span> <span class="nx">actual</span><span class="p">)</span>
 <span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>This approach has the benefit of validating the integrity of the payload
+</code></pre></div><p>This approach has the benefit of validating the integrity of the payload
 before it is consumed. But comes with the downside that if the payload is
 too large, this approach could put significant pressure on the
 application&rsquo;s memory.</p>
@@ -212,25 +197,13 @@ because the integrity of the payload cannot be validated until after the
 entire payload has been read.</p>
 <p>The following is an example of wrapping the payload with a type that will
 compute the checksum and proxy the <code>Read</code> method calls.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;hash/crc32&#34;
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;hash/crc32&#34;
 </span><span class="c1">// import &#34;encoding/csv&#34;
 </span><span class="c1"></span>
 <span class="nx">wrapped</span> <span class="o">:=</span> <span class="nf">NewValidateCRC32Reader</span><span class="p">(</span><span class="nx">expectCRC32</span><span class="p">,</span> <span class="nx">payload</span><span class="p">)</span>
 
 <span class="nx">rows</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">csv</span><span class="p">.</span><span class="nf">NewReader</span><span class="p">(</span><span class="nx">wrapped</span><span class="p">).</span><span class="nf">ReadAll</span><span class="p">()</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>In the above example a <code>StreamValidateCRC32</code> function takes the expected
+</code></pre></div><p>In the above example a <code>StreamValidateCRC32</code> function takes the expected
 CRC32 checksum, the payload, and returns the payload wrapped with CRC32
 checksum validation. This function wraps the payload with a type that
 implements the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> interface. This type will iteratively compute
@@ -239,46 +212,7 @@ the payload has been fully read, the wrapper will compare the computed
 checksum with the expected value. If the values are not equal a relevant
 error can be returned. Otherwise the wrapper will return <code>io.EOF</code> when the
 payload is valid and has been fully read.</p>
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code><span class="lnt"> 1
-</span><span class="lnt"> 2
-</span><span class="lnt"> 3
-</span><span class="lnt"> 4
-</span><span class="lnt"> 5
-</span><span class="lnt"> 6
-</span><span class="lnt"> 7
-</span><span class="lnt"> 8
-</span><span class="lnt"> 9
-</span><span class="lnt">10
-</span><span class="lnt">11
-</span><span class="lnt">12
-</span><span class="lnt">13
-</span><span class="lnt">14
-</span><span class="lnt">15
-</span><span class="lnt">16
-</span><span class="lnt">17
-</span><span class="lnt">18
-</span><span class="lnt">19
-</span><span class="lnt">20
-</span><span class="lnt">21
-</span><span class="lnt">22
-</span><span class="lnt">23
-</span><span class="lnt">24
-</span><span class="lnt">25
-</span><span class="lnt">26
-</span><span class="lnt">27
-</span><span class="lnt">28
-</span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
-</span><span class="lnt">32
-</span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;io&#34;
+<div class="highlight"><pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// import &#34;io&#34;
 </span><span class="c1">// import &#34;hash/crc32&#34;
 </span><span class="c1"></span>
 <span class="c1">// ValidateCRC32Reader provides a wrapper for an io.Reader that computes a
@@ -313,9 +247,7 @@ payload is valid and has been fully read.</p>
 
 	<span class="k">return</span> <span class="nx">n</span><span class="p">,</span> <span class="nx">err</span>
 <span class="p">}</span>
-</code></pre></td></tr></table>
-</div>
-</div><p>The <code>ValidateCRC32Reader</code> type wraps the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> it is initialized
+</code></pre></div><p>The <code>ValidateCRC32Reader</code> type wraps the <a href="https://golang.org/pkg/io/#Reader">io.Reader</a> it is initialized
 with, and computes the checksum of the wrapped reader as its content is
 read. When the wrapped reader returns <a href="https://golang.org/pkg/io/#EOF">io.EOF</a> the <code>ValidateCRC32Reader</code>
 will return an error if the actual checksum of the content doesn&rsquo;t match
@@ -333,7 +265,7 @@ the expected value.</p>
     <span class="item-title">LastMod</span>
     <span class="item-content">
         2020-10-17
-        <a href="github.com/jasdel/jasdel.github.io/commit/0b6269bad6fbab1ff1cd17b9b8312ceb722aaf29" title="edit fixups">(0b6269b)</a>
+        <a href="https://github.com/jasdel/jasdel.github.io/commit/0b6269bad6fbab1ff1cd17b9b8312ceb722aaf29" title="edit fixups">(0b6269b)</a>
     </span>
   </p>
   
@@ -368,7 +300,7 @@ the expected value.</p>
       <a href="https://stackoverflow.com/users/280548/jason-d" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
       <a href="https://twitter.com/jasondelponte" class="iconfont icon-twitter" title="twitter"></a>
       <a href="http://github.com/jasdel" class="iconfont icon-github" title="github"></a>
-  <a href="https://tinker.jasdel.dev/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
 </div>
 
 <div class="copyright">
