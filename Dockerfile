@@ -1,6 +1,7 @@
 FROM public.ecr.aws/amazonlinux/amazonlinux:latest
 
-RUN yum update -y && yum install -y tar xz gzip git coreutils
+RUN yum update -y && \
+	yum install -y tar xz gzip git coreutils
 #RUN curl -L -o nodejs.tar.xz https://nodejs.org/dist/v14.15.1/node-v14.15.1-linux-x64.tar.xz && \
 #    mkdir -p /opt/nodejs && \
 #    tar --strip-components=1 -xJf nodejs.tar.xz -C /opt/nodejs && rm -f nodejs.tar.xz
@@ -17,5 +18,4 @@ WORKDIR /jasdel-docs
 #ENV PATH /opt/nodejs/bin:${PATH}
 #RUN npm install && \
 
-RUN git submodule update --init --recursive themes/beautifulhugo && \
-    HUGO_ENV=production hugo -d docs --gc
+RUN HUGO_ENV=production hugo -d docs --gc
